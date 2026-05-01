@@ -4,12 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verifikasi Akses Dashboard Monitoring</title>
+    <!-- Tambahkan library ikon Google -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #f8f9fa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; width: 350px; }
         h2 { color: #202124; margin-bottom: 10px; font-size: 22px; }
         p { color: #5f6368; font-size: 14px; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        
+        /* Container untuk input password */
+        .input-group { position: relative; width: 100%; margin-bottom: 15px; }
+        
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            padding-right: 45px; /* Beri ruang untuk ikon di kanan */
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-size: 16px; 
+            transition: border-color 0.3s;
+        }
+        
+        input:focus { border-color: #1a73e8; outline: none; }
+
+        /* Gaya Ikon Mata */
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #5f6368;
+            user-select: none;
+        }
+
+        .toggle-password:hover { color: #202124; }
+
         button { width: 100%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
         button:hover { background: #1557b0; }
         #error { color: #d93025; font-size: 13px; margin-top: 10px; display: none; }
@@ -21,13 +52,34 @@
 <div class="card">
     <h2>Akses Dashboard Monitoring BPOPP</h2>
     <p>Masukkan kode akses untuk membuka Dashboard.</p>
-    <input type="password" id="pass" placeholder="Password">
+    
+    <div class="input-group">
+        <input type="password" id="pass" placeholder="Password">
+        <span class="material-icons toggle-password" onclick="togglePassword()" id="eye-icon">
+            visibility
+        </span>
+    </div>
+
     <button onclick="verify()">Buka Akses</button>
     <p id="error">Password salah!</p>
     <div id="loading" class="loading">Memverifikasi...</div>
 </div>
 
 <script>
+    // Fungsi untuk tampil/sembunyi password
+    function togglePassword() {
+        const passInput = document.getElementById('pass');
+        const eyeIcon = document.getElementById('eye-icon');
+        
+        if (passInput.type === "password") {
+            passInput.type = "text";
+            eyeIcon.textContent = "visibility_off";
+        } else {
+            passInput.type = "password";
+            eyeIcon.textContent = "visibility";
+        }
+    }
+
     function verify() {
         const input = document.getElementById('pass').value;
         const error = document.getElementById('error');
@@ -41,7 +93,6 @@
             error.style.display = 'none';
             loading.style.display = 'block';
             
-            // Memberi jeda sedikit agar terlihat seperti proses verifikasi sistem
             setTimeout(() => {
                 window.location.href = LINK_DRIVE;
             }, 800);
